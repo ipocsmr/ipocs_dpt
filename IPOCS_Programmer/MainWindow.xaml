@@ -7,7 +7,7 @@
         xmlns:objectTypes="clr-namespace:IPOCS_Programmer.ObjectTypes"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="750" Closing="window_Closing">
+        Title="IPOCS Data Preperation Tool" Height="500" Width="750" Closing="window_Closing">
     <DockPanel Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
