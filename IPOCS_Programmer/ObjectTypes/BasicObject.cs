@@ -26,5 +26,7 @@ namespace IPOCS_Programmer.ObjectTypes
     {
       return Name;
     }
+
+    public abstract List<byte> Serialize();
   }
 }

@@ -88,6 +88,9 @@
                             <Button ToolTip="Add new object" Click="AddObjectClick">
                                 <Image Source="icons/plus.png" Width="16" />
                             </Button>
+                            <Button ToolTip="Add new object" Click="SerializeClick">
+                                <Image Source="icons/plus.png" Width="16" />
+                            </Button>
                         </StackPanel>
                     </Grid>
                     <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />

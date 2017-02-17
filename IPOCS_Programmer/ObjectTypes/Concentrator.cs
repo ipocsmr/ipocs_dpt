@@ -16,6 +16,19 @@ namespace IPOCS_Programmer.ObjectTypes
 
     [Editor(typeof(ConcentratorEditor), typeof(CollectionEditor))]
     public List<BasicObject> Objects { get; set; } = new List<BasicObject>();
+
+    public List<byte> Serialize()
+    {
+      var vector = new List<byte>();
+
+      foreach (var basicObject in this.Objects)
+      {
+        var objectVector = basicObject.Serialize();
+        vector.AddRange(objectVector);
+      }
+
+      return vector;
+    }
   }
 
   public class ConcentratorEditor: Xceed.Wpf.Toolkit.PropertyGrid.Editors.TypeEditor<CollectionControlButton>

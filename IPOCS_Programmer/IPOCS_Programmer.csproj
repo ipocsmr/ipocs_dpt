@@ -115,6 +115,7 @@
     <Compile Include="ClientTab.xaml.cs">
       <DependentUpon>ClientTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IPAddressExtension.cs" />
     <Compile Include="IPOCS\Message.cs" />
     <Compile Include="IPOCS\Packet.cs" />
     <Compile Include="IPOCS\Packets\Bidirectional\ApplicationData.cs" />
@@ -150,7 +151,10 @@
     <Compile Include="ObjectTypes\BasicObject.cs" />
     <Compile Include="ObjectTypes\Concentrator.cs" />
     <Compile Include="ObjectTypes\GenericInput.cs" />
-    <Compile Include="ObjectTypes\PointT1.cs" />
+    <Compile Include="ObjectTypes\Points.cs" />
+    <Compile Include="ObjectTypes\PointsMotor.cs" />
+    <Compile Include="ObjectTypes\PointsMotor_Pulse.cs" />
+    <Compile Include="ObjectTypes\PointsMotor_Servo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

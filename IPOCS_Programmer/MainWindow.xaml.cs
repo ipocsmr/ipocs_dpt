@@ -90,6 +90,18 @@ namespace IPOCS_Programmer
       Concentrators.Add(concentrator);
     }
 
+    private void SerializeClick(object sender, RoutedEventArgs e)
+    {
+      if (this.objectlist.SelectedItem is ObjectTypes.Concentrator)
+      {
+        var concentrator = this.objectlist.SelectedItem as ObjectTypes.Concentrator;
+        var vector = concentrator.Serialize();
+        var output = BitConverter.ToString(vector.ToArray()).Replace("-", " ");
+        System.Windows.Clipboard.SetText(output);
+        Console.WriteLine(output);
+      }
+    }
+
     private void ArduinoConnect_Click(object sender, RoutedEventArgs e)
     {
       var item = sender as System.Windows.Controls.Primitives.ToggleButton;
@@ -186,6 +198,11 @@ namespace IPOCS_Programmer
                      from lType in lAssembly.GetTypes()
                      where typeof(ObjectTypes.BasicObject).IsAssignableFrom(lType)
                      select lType).ToList();
+        var types2 = (from lAssembly in AppDomain.CurrentDomain.GetAssemblies()
+                      from lType in lAssembly.GetTypes()
+                      where typeof(ObjectTypes.PointsMotor).IsAssignableFrom(lType)
+                      select lType).ToList();
+        types.AddRange(types2);
         types.Add(typeof(ObjectTypes.BasicObject));
         XmlSerializer xsSubmit = new XmlSerializer(Concentrators.GetType(), types.ToArray());
         using (var reader = XmlReader.Create(dialog.FileName))
@@ -209,6 +226,11 @@ namespace IPOCS_Programmer
                                 from lType in lAssembly.GetTypes()
                                 where typeof(ObjectTypes.BasicObject).IsAssignableFrom(lType)
                                 select lType).ToList();
+        var types2 = (from lAssembly in AppDomain.CurrentDomain.GetAssemblies()
+                     from lType in lAssembly.GetTypes()
+                     where typeof(ObjectTypes.PointsMotor).IsAssignableFrom(lType)
+                     select lType).ToList();
+        types.AddRange(types2);
         types.Add(typeof(ObjectTypes.BasicObject));
         XmlSerializer xsSubmit = new XmlSerializer(Concentrators.GetType(), types.ToArray());
         using (XmlWriter writer = XmlWriter.Create(dialog.FileName))
