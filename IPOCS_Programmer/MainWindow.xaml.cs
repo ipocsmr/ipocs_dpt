@@ -92,7 +92,7 @@ namespace IPOCS_Programmer
 
     private void SerializeClick(object sender, RoutedEventArgs e)
     {
-      if (this.objectlist.SelectedItem is ObjectTypes.Concentrator)
+      if (this.objectlist.SelectedItem != null && this.objectlist.SelectedItem is ObjectTypes.Concentrator)
       {
         var concentrator = this.objectlist.SelectedItem as ObjectTypes.Concentrator;
         var vector = concentrator.Serialize();

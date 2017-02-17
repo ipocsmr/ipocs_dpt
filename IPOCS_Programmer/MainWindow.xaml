@@ -85,11 +85,11 @@
                             <Button  ToolTip="Save" Margin="0 0 5 0" Click="Editor_SaveSiteData_Click">
                                 <Image Source="icons/content-save.png" Width="16" />
                             </Button>
-                            <Button ToolTip="Add new object" Click="AddObjectClick">
+                            <Button ToolTip="Add new object" Margin="0 0 5 0" Click="AddObjectClick">
                                 <Image Source="icons/plus.png" Width="16" />
                             </Button>
-                            <Button ToolTip="Add new object" Click="SerializeClick">
-                                <Image Source="icons/plus.png" Width="16" />
+                            <Button ToolTip="Export to clipboard" Click="SerializeClick">
+                                <Image Source="icons/export.png" Width="16" />
                             </Button>
                         </StackPanel>
                     </Grid>
