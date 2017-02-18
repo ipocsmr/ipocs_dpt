@@ -33,11 +33,11 @@ namespace IPOCS_Programmer.ObjectTypes
     {
       var vector = new List<byte>();
       vector.Add(this.objectTypeId);
+      int lengthPos = vector.Count;
+      vector.Add(0); // Length;
       byte[] toBytes = Encoding.ASCII.GetBytes(this.Name);
       vector.AddRange(toBytes);
       vector.Add(0);
-      int lengthPos = vector.Count;
-      vector.Add(0); // Length;
       vector.Add(this.frogOutput);
 
       foreach (var motor in Motors)
@@ -48,7 +48,6 @@ namespace IPOCS_Programmer.ObjectTypes
       vector[lengthPos] = (byte)(vector.Count - lengthPos);
       return vector;
     }
-
   }
 
   public class PointsMotorEditor : Xceed.Wpf.Toolkit.PropertyGrid.Editors.TypeEditor<CollectionControlButton>
