@@ -19,6 +19,16 @@ namespace IPOCS_Programmer.ObjectTypes
         public byte barrier3 { get; set; }
         public byte barrier4 { get; set; }
 
+        public override IList<Type> SupportedOrders
+        {
+            get
+            {
+                var list = base.SupportedOrders;
+                list.Add(typeof(IPOCS.Packets.Orders.SetLevelCrossing));
+                return list;
+            }
+        }
+
         protected override void Serialize(List<byte> buffer)
         {
             buffer.Add(this.lightWhite);
