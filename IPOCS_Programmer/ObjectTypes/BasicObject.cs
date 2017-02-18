@@ -27,6 +27,20 @@ namespace IPOCS_Programmer.ObjectTypes
             return Name;
         }
 
-        public abstract List<byte> Serialize();
+        public List<byte> Serialize()
+        {
+            var buffer = new List<byte>();
+            buffer.Add(this.objectTypeId);
+            int lengthPos = buffer.Count;
+            buffer.Add(0); // Length;
+            byte[] toBytes = Encoding.ASCII.GetBytes(this.Name);
+            buffer.AddRange(toBytes);
+            buffer.Add(0);
+            this.Serialize(buffer);
+            buffer[lengthPos] = (byte)(buffer.Count - lengthPos);
+            return buffer;
+        }
+
+        protected abstract void Serialize(List<byte> buffer);
     }
 }

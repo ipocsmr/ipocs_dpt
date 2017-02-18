@@ -12,17 +12,9 @@ namespace IPOCS_Programmer.ObjectTypes
 
         public byte inputPin { get; set; }
 
-        public override List<byte> Serialize()
+        protected override void Serialize(List<byte> buffer)
         {
-            var vector = new List<byte>();
-            vector.Add(this.objectTypeId);
-            byte[] toBytes = Encoding.ASCII.GetBytes(this.Name);
-            vector.AddRange(toBytes);
-            vector.Add(0);
-            vector.Add(1); // Length;
-            vector.Add(this.inputPin);
-
-            return vector;
+            buffer.Add(this.inputPin);
         }
     }
 }

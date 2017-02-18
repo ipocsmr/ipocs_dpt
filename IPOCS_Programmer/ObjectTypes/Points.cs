@@ -29,24 +29,14 @@ namespace IPOCS_Programmer.ObjectTypes
             }
         }
 
-        public override List<byte> Serialize()
+        protected override void Serialize(List<byte> buffer)
         {
-            var vector = new List<byte>();
-            vector.Add(this.objectTypeId);
-            int lengthPos = vector.Count;
-            vector.Add(0); // Length;
-            byte[] toBytes = Encoding.ASCII.GetBytes(this.Name);
-            vector.AddRange(toBytes);
-            vector.Add(0);
-            vector.Add(this.frogOutput);
-
+            buffer.Add(this.frogOutput);
             foreach (var motor in Motors)
             {
                 var motorVector = motor.Serialize();
-                vector.AddRange(motorVector);
+                buffer.AddRange(motorVector);
             }
-            vector[lengthPos] = (byte)(vector.Count - lengthPos);
-            return vector;
         }
     }
 
