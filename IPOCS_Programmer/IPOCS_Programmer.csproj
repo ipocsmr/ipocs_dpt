@@ -178,6 +178,13 @@
     <Compile Include="Networker.cs" />
     <Compile Include="ObjectTypes\BasicObject.cs" />
     <Compile Include="ObjectTypes\Concentrator.cs" />
+    <Compile Include="ObjectTypes\Booster.cs" />
+    <Compile Include="ObjectTypes\Turntable.cs" />
+    <Compile Include="ObjectTypes\SemaphoreWing.cs" />
+    <Compile Include="ObjectTypes\SignalBoard.cs" />
+    <Compile Include="ObjectTypes\LevelCrossing.cs" />
+    <Compile Include="ObjectTypes\IRDetection.cs" />
+    <Compile Include="ObjectTypes\GenericOutput.cs" />
     <Compile Include="ObjectTypes\GenericInput.cs" />
     <Compile Include="ObjectTypes\Points.cs" />
     <Compile Include="ObjectTypes\PointsMotor.cs" />

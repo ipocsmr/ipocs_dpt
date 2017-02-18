@@ -8,13 +8,16 @@ namespace IPOCS_Programmer.ObjectTypes
 {
     public class GenericInput : BasicObject
     {
-        public override byte objectTypeId { get { return 1; } }
+        public override byte objectTypeId { get { return 11; } }
 
         public byte inputPin { get; set; }
+
+        public byte debounceTime { get; set; }
 
         protected override void Serialize(List<byte> buffer)
         {
             buffer.Add(this.inputPin);
+            buffer.Add(this.debounceTime);
         }
     }
 }
