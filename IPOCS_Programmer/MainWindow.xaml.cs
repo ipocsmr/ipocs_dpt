@@ -219,32 +219,40 @@ namespace IPOCS_Programmer
                     foreach (var concentrator in objs)
                         Concentrators.Add(concentrator);
                 }
+                saveFileName = dialog.FileName;
             }
         }
 
+        string saveFileName { get; set; }
+
         private void Editor_SaveSiteData_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.AddExtension = true;
-            dialog.DefaultExt = "*.xml";
-            var saved = dialog.ShowDialog();
-            if (saved.HasValue && saved.Value)
+            if (string.IsNullOrWhiteSpace(saveFileName))
             {
-                var types = (from lAssembly in AppDomain.CurrentDomain.GetAssemblies()
-                             from lType in lAssembly.GetTypes()
-                             where typeof(ObjectTypes.BasicObject).IsAssignableFrom(lType)
-                             select lType).ToList();
-                var types2 = (from lAssembly in AppDomain.CurrentDomain.GetAssemblies()
-                              from lType in lAssembly.GetTypes()
-                              where typeof(ObjectTypes.PointsMotor).IsAssignableFrom(lType)
-                              select lType).ToList();
-                types.AddRange(types2);
-                types.Add(typeof(ObjectTypes.BasicObject));
-                XmlSerializer xsSubmit = new XmlSerializer(Concentrators.GetType(), types.ToArray());
-                using (XmlWriter writer = XmlWriter.Create(dialog.FileName))
+                var dialog = new Microsoft.Win32.SaveFileDialog();
+                dialog.AddExtension = true;
+                dialog.DefaultExt = "*.xml";
+                var saved = dialog.ShowDialog();
+                if (saved.HasValue && saved.Value)
                 {
-                    xsSubmit.Serialize(writer, Concentrators);
+                    this.saveFileName = dialog.FileName;
                 }
+            }
+
+            var types = (from lAssembly in AppDomain.CurrentDomain.GetAssemblies()
+                         from lType in lAssembly.GetTypes()
+                         where typeof(ObjectTypes.BasicObject).IsAssignableFrom(lType)
+                         select lType).ToList();
+            var types2 = (from lAssembly in AppDomain.CurrentDomain.GetAssemblies()
+                          from lType in lAssembly.GetTypes()
+                          where typeof(ObjectTypes.PointsMotor).IsAssignableFrom(lType)
+                          select lType).ToList();
+            types.AddRange(types2);
+            types.Add(typeof(ObjectTypes.BasicObject));
+            XmlSerializer xsSubmit = new XmlSerializer(Concentrators.GetType(), types.ToArray());
+            using (XmlWriter writer = XmlWriter.Create(this.saveFileName))
+            {
+                xsSubmit.Serialize(writer, Concentrators);
             }
         }
     }
