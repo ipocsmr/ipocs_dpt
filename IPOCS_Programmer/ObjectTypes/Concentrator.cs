@@ -10,46 +10,46 @@ using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 
 namespace IPOCS_Programmer.ObjectTypes
 {
-  public class Concentrator
-  {
-    public byte UnitID { get; set; }
-
-    [Editor(typeof(ConcentratorEditor), typeof(CollectionEditor))]
-    public List<BasicObject> Objects { get; set; } = new List<BasicObject>();
-
-    public List<byte> Serialize()
+    public class Concentrator
     {
-      var vector = new List<byte>();
+        public byte UnitID { get; set; }
 
-      foreach (var basicObject in this.Objects)
-      {
-        var objectVector = basicObject.Serialize();
-        vector.AddRange(objectVector);
-      }
+        [Editor(typeof(ConcentratorEditor), typeof(CollectionEditor))]
+        public List<BasicObject> Objects { get; set; } = new List<BasicObject>();
 
-      return vector;
-    }
-  }
+        public List<byte> Serialize()
+        {
+            var vector = new List<byte>();
 
-  public class ConcentratorEditor: Xceed.Wpf.Toolkit.PropertyGrid.Editors.TypeEditor<CollectionControlButton>
-  {
-    protected override void SetValueDependencyProperty()
-    {
-      ValueProperty = CollectionControlButton.ItemsSourceProperty;
+            foreach (var basicObject in this.Objects)
+            {
+                var objectVector = basicObject.Serialize();
+                vector.AddRange(objectVector);
+            }
+
+            return vector;
+        }
     }
 
-    protected override void ResolveValueBinding(PropertyItem propertyItem)
+    public class ConcentratorEditor : Xceed.Wpf.Toolkit.PropertyGrid.Editors.TypeEditor<CollectionControlButton>
     {
-      var type = propertyItem.PropertyType;
-      Editor.ItemsSourceType = type;
-      // added
-      
-      var types = AppDomain.CurrentDomain.GetAssemblies()
-          .SelectMany(s => s.GetTypes())
-          .Where(p => typeof(ObjectTypes.BasicObject).IsAssignableFrom(p) && !p.IsAbstract);
-      Editor.NewItemTypes = types.ToList();
-      
-      base.ResolveValueBinding(propertyItem);
+        protected override void SetValueDependencyProperty()
+        {
+            ValueProperty = CollectionControlButton.ItemsSourceProperty;
+        }
+
+        protected override void ResolveValueBinding(PropertyItem propertyItem)
+        {
+            var type = propertyItem.PropertyType;
+            Editor.ItemsSourceType = type;
+            // added
+
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(ObjectTypes.BasicObject).IsAssignableFrom(p) && !p.IsAbstract);
+            Editor.NewItemTypes = types.ToList();
+
+            base.ResolveValueBinding(propertyItem);
+        }
     }
-  }
 }

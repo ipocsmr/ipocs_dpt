@@ -41,21 +41,21 @@ namespace IPOCS_Programmer
             {
                 this.Dispatcher.Invoke(() =>
           {
-                  this.tcpLog.AppendText("Client connected" + Environment.NewLine);
-                  this.tcpLog.ScrollToEnd();
-                  Clients.Add(new ClientTab(client));
-              });
+              this.tcpLog.AppendText("Client connected" + Environment.NewLine);
+              this.tcpLog.ScrollToEnd();
+              Clients.Add(new ClientTab(client));
+          });
             };
             Networker.Instance.OnDisconnect += (client) =>
             {
                 this.Dispatcher.Invoke(() =>
           {
-                  this.tcpLog.AppendText(((client.UnitID == 0) ? "Unkown" : client.UnitID.ToString()) + " client disconnected" + Environment.NewLine);
-                  this.tcpLog.ScrollToEnd();
-                  var ct = Clients.FirstOrDefault((c) => c.Client == client);
-                  if (ct != null)
-                      Clients.Remove(ct);
-              });
+              this.tcpLog.AppendText(((client.UnitID == 0) ? "Unkown" : client.UnitID.ToString()) + " client disconnected" + Environment.NewLine);
+              this.tcpLog.ScrollToEnd();
+              var ct = Clients.FirstOrDefault((c) => c.Client == client);
+              if (ct != null)
+                  Clients.Remove(ct);
+          });
             };
             Networker.Instance.OnListening += (isListening) =>
             {
@@ -63,12 +63,12 @@ namespace IPOCS_Programmer
                 {
                     this.Dispatcher.Invoke(() =>
               {
-                    if (isListening)
-                        this.tcpLog.AppendText("Listening for connections..." + Environment.NewLine);
-                    else
-                        this.tcpLog.AppendText("No longer listening for connections." + Environment.NewLine);
-                    this.tcpLog.ScrollToEnd();
-                });
+                  if (isListening)
+                      this.tcpLog.AppendText("Listening for connections..." + Environment.NewLine);
+                  else
+                      this.tcpLog.AppendText("No longer listening for connections." + Environment.NewLine);
+                  this.tcpLog.ScrollToEnd();
+              });
                 }
                 catch (System.Threading.Tasks.TaskCanceledException) { }
             };

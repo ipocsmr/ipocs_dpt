@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace IPOCS_Programmer.ObjectTypes
 {
-  public class PointsMotor_Servo: PointsMotor
-  {
-    public override byte motorTypeId { get { return 2; } }
-    public byte servoPin { get; set; }
-    public byte positionPin { get; set; }
-
-    public override List<byte> Serialize()
+    public class PointsMotor_Servo : PointsMotor
     {
-      var vector = new List<byte>();
-      vector.Add(motorTypeId);
-      vector.Add(this.servoPin);
-      vector.Add(positionPin);
-      return vector;
-    }
+        public override byte motorTypeId { get { return 2; } }
+        public byte servoPin { get; set; }
+        public byte positionPin { get; set; }
 
-  }
+        public override List<byte> Serialize()
+        {
+            var vector = new List<byte>();
+            vector.Add(motorTypeId);
+            vector.Add(this.servoPin);
+            vector.Add(positionPin);
+            return vector;
+        }
+
+    }
 }

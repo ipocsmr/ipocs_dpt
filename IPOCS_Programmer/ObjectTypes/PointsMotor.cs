@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace IPOCS_Programmer.ObjectTypes
 {
-  public abstract class PointsMotor
-  {
-    public abstract byte motorTypeId { get; }
+    public abstract class PointsMotor
+    {
+        public abstract byte motorTypeId { get; }
 
-    public abstract List<byte> Serialize();
-  }
+        public abstract List<byte> Serialize();
+    }
 }
