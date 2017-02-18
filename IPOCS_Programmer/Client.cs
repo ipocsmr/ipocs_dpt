@@ -74,6 +74,8 @@ namespace IPOCS_Programmer
                     }
 
                     this.UnitID = Encoding.UTF8.GetBytes(message.RXID_OBJECT)[0];
+
+
                     // TODO: Validate the site data version.
                     // TODO: Check protocol version.
 
@@ -84,7 +86,6 @@ namespace IPOCS_Programmer
                         this.Disconnect();
                         break;
                     }
-                    OnConnect?.Invoke(this);
 
                     var responseMsg = new IPOCS.Message();
                     responseMsg.RXID_OBJECT = Encoding.UTF8.GetString(new byte[] { this.UnitID });
@@ -93,6 +94,26 @@ namespace IPOCS_Programmer
                         RM_PROTOCOL_VERSION = pkt.RM_PROTOCOL_VERSION
                     });
                     this.Send(responseMsg);
+
+                    List<byte> data = this.unit.Serialize();
+                    var crc = new ccit_crc16(InitialCrcValue.NonZero1);
+                    ushort computedChecksum = crc.ComputeChecksum(data.ToArray());
+                    ushort providedChecksum = (ushort)Convert.ToInt32(pkt.RXID_SITE_DATA_VERSION, 16);
+                    
+                    if (providedChecksum == 0 || computedChecksum != providedChecksum)
+                    {
+                        responseMsg = new IPOCS.Message();
+                        responseMsg.RXID_OBJECT = Encoding.UTF8.GetString(new byte[] { this.UnitID });
+                        responseMsg.packets.Add(new IPOCS.Packets.ApplicationData
+                        {
+                            RNID_XUSER = 0x0001,
+                            PAYLOAD = data.ToArray()
+                        });
+                        this.Send(responseMsg);
+                        this.Disconnect();
+                        break;
+                    } else
+                        OnConnect?.Invoke(this);
                 }
                 else
                     // And if not, hand it to listeners
