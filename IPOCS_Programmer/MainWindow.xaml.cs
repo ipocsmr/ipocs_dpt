@@ -203,6 +203,7 @@ namespace IPOCS_Programmer
                 using (var reader = XmlReader.Create(dialog.FileName))
                 {
                     var objs = xsSubmit.Deserialize(reader) as ObservableCollection<ObjectTypes.Concentrator>;
+                    Concentrators.Clear();
                     foreach (var concentrator in objs)
                         Concentrators.Add(concentrator);
                 }
