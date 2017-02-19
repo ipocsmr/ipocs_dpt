@@ -45,18 +45,17 @@ namespace IPOCS_Programmer
             this.udpListener = new UdpClient(new IPEndPoint(IPAddress.Any, 10000));
         }
 
-        private bool _isListening = false;
+        CancellationTokenSource stopToken = new CancellationTokenSource();
         public bool isListening
         {
             get
             {
-                return this._isListening;
+                return this.listenerThread.IsAlive;
             }
             set
             {
-                if (value != this.isListening)
+                if (value != this.listenerThread.IsAlive)
                 {
-                    this._isListening = value;
                     if (value && !this.listenerThread.IsAlive)
                     {
                         this.listenerThread = new Thread(new ThreadStart(this.listenerThreadStart));
@@ -68,6 +67,7 @@ namespace IPOCS_Programmer
                         {
                             c.Disconnect();
                         });
+                        this.stopToken.Cancel();
                     }
                 }
             }
@@ -77,7 +77,7 @@ namespace IPOCS_Programmer
         {
             this.OnListening?.Invoke(true);
             this.listener.Start();
-            while (this.isListening)
+            while (!this.stopToken.IsCancellationRequested)
             {
                 if (udpListener.Available != 0)
                 {

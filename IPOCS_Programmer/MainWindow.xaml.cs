@@ -170,19 +170,6 @@ namespace IPOCS_Programmer
             this.toSend.Text = string.Empty;
         }
 
-        private void StartServer_Click(object sender, RoutedEventArgs e)
-        {
-            var item = sender as System.Windows.Controls.Primitives.ToggleButton;
-            if (item.IsChecked.HasValue && item.IsChecked.Value)
-            {
-                Networker.Instance.isListening = true;
-            }
-            else
-            {
-                Networker.Instance.isListening = false;
-            }
-        }
-
         private void window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Networker.Instance.isListening = false;
@@ -220,11 +207,28 @@ namespace IPOCS_Programmer
                         Concentrators.Add(concentrator);
                 }
                 saveFileName = dialog.FileName;
+                restartServer();
             }
         }
 
         string saveFileName { get; set; }
 
+        private void restartServer()
+        {
+            var bgw = new System.ComponentModel.BackgroundWorker();
+            bgw.DoWork += (sender, e) =>
+            {
+                if (Networker.Instance.isListening)
+                    Networker.Instance.isListening = false;
+                while (Networker.Instance.isListening)
+                {
+                    System.Threading.Thread.Sleep(100);
+                }
+                Networker.Instance.isListening = true;
+            };
+            bgw.RunWorkerAsync();
+        }
+        
         private void Editor_SaveSiteData_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(saveFileName))
@@ -236,6 +240,7 @@ namespace IPOCS_Programmer
                 if (saved.HasValue && saved.Value)
                 {
                     this.saveFileName = dialog.FileName;
+                    restartServer();
                 }
             }
 

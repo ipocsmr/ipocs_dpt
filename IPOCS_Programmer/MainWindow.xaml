@@ -9,13 +9,6 @@
         mc:Ignorable="d"
         Title="IPOCS Data Preperation Tool" Height="500" Width="750" Closing="window_Closing">
     <DockPanel Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_Open" />
-                <MenuItem Header="_Close" />
-                <MenuItem Header="_Save" />
-            </MenuItem>
-        </Menu>
         <TabControl Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
             <TabItem Header="Arduino control">
                 <DockPanel>
@@ -56,7 +49,7 @@
                     <TextBox HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" IsReadOnly="True" x:Name="incoming" />
                 </DockPanel>
             </TabItem>
-            <TabItem Header="Yard objects" IsSelected="True">
+            <TabItem Header="Yard configuration" IsSelected="True">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200"></ColumnDefinition>
@@ -97,13 +90,8 @@
                     <xctk:PropertyGrid Grid.Column="2" x:Name="_propertyGrid" AutoGenerateProperties="True" SelectedObject="{Binding SelectedItem, ElementName=objectlist}" />
                 </Grid>
             </TabItem>
-            <TabItem Header="Ethernet server">
+            <TabItem Header="Connected clients">
                 <DockPanel>
-                    <ToolBar DockPanel.Dock="Top">
-                        <ToggleButton Click="StartServer_Click" Margin="0 0 5 0">
-                            <Image Source="icons/server-network.png" Width="16" />
-                        </ToggleButton>
-                    </ToolBar>
                     <ListBox Width="200" DockPanel.Dock="Left" ItemsSource="{Binding Clients, ElementName=window, Mode=OneWay}" x:Name="ClientList">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
