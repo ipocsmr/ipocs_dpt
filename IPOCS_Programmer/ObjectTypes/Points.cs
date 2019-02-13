@@ -24,7 +24,7 @@ namespace IPOCS_Programmer.ObjectTypes
             get
             {
                 var list = base.SupportedOrders;
-                list.Add(typeof(IPOCS.Packets.Orders.ThrowPoints));
+                list.Add(typeof(IPOCS.Protocol.Packets.Orders.ThrowPoints));
                 return list;
             }
         }

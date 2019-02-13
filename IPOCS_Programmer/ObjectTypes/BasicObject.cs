@@ -17,7 +17,7 @@ namespace IPOCS_Programmer.ObjectTypes
             get
             {
                 var list = new List<Type>();
-                list.Add(typeof(IPOCS.Packets.Orders.RequestStatus));
+                list.Add(typeof(IPOCS.Protocol.Packets.Orders.RequestStatus));
                 return list;
             }
         }

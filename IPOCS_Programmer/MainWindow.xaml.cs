@@ -37,16 +37,21 @@ namespace IPOCS_Programmer
             var ports = System.IO.Ports.SerialPort.GetPortNames();
             this.PortMenu.ItemsSource = ports;
 
-            Networker.Instance.OnConnect += (client) =>
+            IPOCS.Networker.Instance.OnConnect += (client) =>
             {
                 this.Dispatcher.Invoke(() =>
           {
+              if (MainWindow.Concentrators.FirstOrDefault((c) => c.UnitID == client.UnitID) == null)
+              {
+                  client.Disconnect();
+                  return;
+              }
               this.tcpLog.AppendText("Client connected" + Environment.NewLine);
               this.tcpLog.ScrollToEnd();
               Clients.Add(new ClientTab(client));
           });
             };
-            Networker.Instance.OnDisconnect += (client) =>
+            IPOCS.Networker.Instance.OnDisconnect += (client) =>
             {
                 this.Dispatcher.Invoke(() =>
           {
@@ -57,7 +62,7 @@ namespace IPOCS_Programmer
                   Clients.Remove(ct);
           });
             };
-            Networker.Instance.OnListening += (isListening) =>
+            IPOCS.Networker.Instance.OnListening += (isListening) =>
             {
                 try
                 {
@@ -172,7 +177,7 @@ namespace IPOCS_Programmer
 
         private void window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Networker.Instance.isListening = false;
+            IPOCS.Networker.Instance.isListening = false;
             if (this.port != null && this.port.IsOpen)
             {
                 this.port.Close();
@@ -219,13 +224,13 @@ namespace IPOCS_Programmer
             var bgw = new System.ComponentModel.BackgroundWorker();
             bgw.DoWork += (sender, e) =>
             {
-                if (Networker.Instance.isListening)
-                    Networker.Instance.isListening = false;
-                while (Networker.Instance.isListening)
+                if (IPOCS.Networker.Instance.isListening)
+                    IPOCS.Networker.Instance.isListening = false;
+                while (IPOCS.Networker.Instance.isListening)
                 {
                     System.Threading.Thread.Sleep(100);
                 }
-                Networker.Instance.isListening = true;
+                IPOCS.Networker.Instance.isListening = true;
             };
             bgw.RunWorkerAsync();
         }

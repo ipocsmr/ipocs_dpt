@@ -24,7 +24,7 @@ namespace IPOCS_Programmer.ObjectTypes
             get
             {
                 var list = base.SupportedOrders;
-                list.Add(typeof(IPOCS.Packets.Orders.SetLevelCrossing));
+                list.Add(typeof(IPOCS.Protocol.Packets.Orders.SetLevelCrossing));
                 return list;
             }
         }

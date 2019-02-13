@@ -29,9 +29,9 @@ namespace IPOCS_Programmer
         DependencyProperty.Register("Identity", typeof(string), typeof(ClientTab),
         new PropertyMetadata(string.Empty));
 
-        public List<ObjectTypes.BasicObject> Objects { get { return this.Client.unit.Objects; } }
+        public List<ObjectTypes.BasicObject> Objects { get { return MainWindow.Concentrators.FirstOrDefault((c) => c.UnitID == this.Client.UnitID).Objects; } }
 
-        public ClientTab(Client client)
+        public ClientTab(IPOCS.Client client)
         {
             this.Client = client;
             this.Identity = "Unknown client";
@@ -56,7 +56,7 @@ namespace IPOCS_Programmer
 
         public string Identity { get; private set; }
 
-        public Client Client { get; private set; }
+        public IPOCS.Client Client { get; private set; }
 
         private void TextBoxNet_KeyUp(object sender, KeyEventArgs e)
         {
@@ -72,9 +72,9 @@ namespace IPOCS_Programmer
             {
                 var bo = this.comboBox.SelectedItem as ObjectTypes.BasicObject;
 
-                var msg = new IPOCS.Message();
+                var msg = new IPOCS.Protocol.Message();
                 msg.RXID_OBJECT = bo.Name;
-                var packet = this.PacketToSend.SelectedObject as IPOCS.Packet;
+                var packet = this.PacketToSend.SelectedObject as IPOCS.Protocol.Packet;
                 msg.packets.Add(packet);
                 this.tcpLog.AppendText($"->- {msg.RXID_OBJECT} : {packet.GetType().Name} : {packet.ToString()}" + Environment.NewLine);
                 Client.Send(msg);

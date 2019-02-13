@@ -17,7 +17,7 @@ namespace IPOCS_Programmer.ObjectTypes
             get
             {
                 var list = base.SupportedOrders;
-                list.Add(typeof(IPOCS.Packets.Orders.SetOutput));
+                list.Add(typeof(IPOCS.Protocol.Packets.Orders.SetOutput));
                 return list;
             }
         }
