@@ -8,14 +8,18 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Makaretu.Dns;
 
 namespace IPOCS
 {
     public class Networker
     {
         private TcpListener listener { get; set; }
-        private UdpClient udpListener { get; set; }
         private Thread listenerThread;
+        private bool _started { get; set; } = false;
+
+        private MulticastService mdns { get; set; }
+        private ServiceDiscovery mdnsServiceDiscovery { get; set; }
 
         private static Networker instance;
 
@@ -40,10 +44,24 @@ namespace IPOCS
 
         private Networker()
         {
+            mdns = new MulticastService((sourceInterfaces) => { return sourceInterfaces; });
+            mdnsServiceDiscovery = new ServiceDiscovery(mdns);
+            mdnsServiceDiscovery.Advertise(new ServiceProfile("ipocs", "_ipocs._tcp", 10000));
+
             this.listenerThread = new Thread(new ThreadStart(this.listenerThreadStart));
             this.listener = new TcpListener(IPAddress.Any, 10000);
-            this.udpListener = new UdpClient(new IPEndPoint(IPAddress.Any, 10000));
+            this.stopToken.Token.Register(() => listener.Stop());
         }
+
+        ~Networker()
+        {
+            if (_started)
+            {
+                this.isListening = false;
+                this.listenerThread.Join();
+            }
+        }
+
 
         CancellationTokenSource stopToken = new CancellationTokenSource();
         public bool isListening
@@ -54,85 +72,44 @@ namespace IPOCS
             }
             set
             {
-                if (value != this.listenerThread.IsAlive)
+                if (value != _started)
                 {
-                    if (value && !this.listenerThread.IsAlive)
+                    if (value && !_started)
                     {
                         this.listenerThread = new Thread(new ThreadStart(this.listenerThreadStart));
                         this.listenerThread.Start();
+                        mdns.Start();
+                        _started = value;
                     }
-                    if (!value && this.listenerThread.IsAlive)
+                    if (!value && _started)
                     {
                         Clients.ForEach((c) =>
                         {
                             c.Disconnect();
                         });
                         this.stopToken.Cancel();
+                        this.listener.Stop();
+                        mdns.Stop();
+                        _started = value;
                     }
                 }
             }
         }
 
-        private void listenerThreadStart()
+        private async void listenerThreadStart()
         {
             this.OnListening?.Invoke(true);
             this.listener.Start();
             while (!this.stopToken.IsCancellationRequested)
             {
-                if (udpListener.Available != 0)
+                try
                 {
-                    try
-                    {
-                        //Console.WriteLine("New UDP packet");
-                        var remote = new IPEndPoint(IPAddress.Any, 0);
-                        byte[] data = udpListener.Receive(ref remote);
-                        var recString = Encoding.ASCII.GetString(data);
-                        if (recString == "get server")
-                        {
-                            IPAddress localIP = null;
-                            NetworkInterface[] Interfaces = NetworkInterface.GetAllNetworkInterfaces();
-                            foreach (NetworkInterface Interface in Interfaces)
-                            {
-                                if (Interface.NetworkInterfaceType == NetworkInterfaceType.Loopback) continue;
-                                //Console.WriteLine(Interface.Description);
-                                UnicastIPAddressInformationCollection UnicastIPInfoCol = Interface.GetIPProperties().UnicastAddresses;
-                                foreach (UnicastIPAddressInformation UnicatIPInfo in UnicastIPInfoCol)
-                                {
-                                    try
-                                    {
-                                        if (UnicatIPInfo.Address.IsInSameSubnet(remote.Address, UnicatIPInfo.IPv4Mask))
-                                        {
-                                            localIP = UnicatIPInfo.Address;
-                                            break;
-                                        }
-                                    }
-                                    catch (ArgumentException) { }
-                                }
-                                if (localIP != null)
-                                    break;
-                            }
-
-                            if (localIP != null)
-                            {
-                                var localIPB = localIP.GetAddressBytes();
-                                data = new byte[] { localIPB[0], localIPB[1], localIPB[2], localIPB[3], 10000 >> 8, 10000 & 0xFF };
-                                udpListener.Send(data, data.Length, remote);
-                            }
-                        }
-                    }
-                    catch { }
-                }
-
-                if (!listener.Pending())
-                {
-                    Thread.Sleep(1000);
-                    continue;
-                }
-                var tcpClient = this.listener.AcceptTcpClient();
-                var client = new Client(tcpClient);
-                client.OnDisconnect += (c) => { Clients.Remove(c); OnDisconnect?.Invoke(c); };
-                client.OnConnect += (c) => { Clients.Add(c); OnConnect?.Invoke(client); };
-                Clients.Add(client);
+                    var tcpClient = await Task.Run(() => listener.AcceptTcpClientAsync(), this.stopToken.Token);
+                    var client = new Client(tcpClient);
+                    client.OnDisconnect += (c) => { Clients.Remove(c); OnDisconnect?.Invoke(c); };
+                    client.OnConnect += (c) => { Clients.Add(c); OnConnect?.Invoke(client); };
+                    Clients.Add(client);
+                } catch (Exception) { }
             }
             this.OnListening?.Invoke(false);
         }
