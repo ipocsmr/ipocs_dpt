@@ -40,40 +40,56 @@ namespace IPOCS_Programmer
             IPOCS.Networker.Instance.OnConnect += (client) =>
             {
                 this.Dispatcher.Invoke(() =>
-          {
-              if (MainWindow.Concentrators.FirstOrDefault((c) => c.UnitID == client.UnitID) == null)
-              {
-                  client.Disconnect();
-                  return;
-              }
-              this.tcpLog.AppendText("Client connected" + Environment.NewLine);
-              this.tcpLog.ScrollToEnd();
-              Clients.Add(new ClientTab(client));
-          });
+                {
+                    if (MainWindow.Concentrators.FirstOrDefault((c) => c.UnitID == client.UnitID) == null)
+                    {
+                        client.Disconnect();
+                        return;
+                    }
+                    this.tcpLog.AppendText("Client connected" + Environment.NewLine);
+                    this.tcpLog.ScrollToEnd();
+                    Clients.Add(new ClientTab(client));
+                });
+            };
+            IPOCS.Networker.Instance.OnConnectionRequest += (client, request) =>
+            {
+                var concentrator = Concentrators.FirstOrDefault((c) => c.UnitID == client.UnitID);
+                var vector = concentrator.Serialize();
+                var output = BitConverter.ToString(vector.ToArray()).Replace("-", " ");
+
+                //var crcC = new ccit_crc16(InitialCrcValue.NonZero1);
+                //ushort crc = crcC.ComputeChecksum(vector.ToArray());
+
+                this.Dispatcher.Invoke(() =>
+                {
+                    this.tcpLog.AppendText("Recieved CRC: " + request.RXID_SITE_DATA_VERSION + ", Calculated CRC: " + IPOCS.CRC16.Calculate(vector.ToArray()).ToString("X4") + Environment.NewLine);
+                    this.tcpLog.ScrollToEnd();
+                });
+                return true;
             };
             IPOCS.Networker.Instance.OnDisconnect += (client) =>
             {
                 this.Dispatcher.Invoke(() =>
-          {
-              this.tcpLog.AppendText(((client.UnitID == 0) ? "Unkown" : client.UnitID.ToString()) + " client disconnected" + Environment.NewLine);
-              this.tcpLog.ScrollToEnd();
-              var ct = Clients.FirstOrDefault((c) => c.Client == client);
-              if (ct != null)
-                  Clients.Remove(ct);
-          });
+                {
+                    this.tcpLog.AppendText(((client.UnitID == 0) ? "Unkown" : client.UnitID.ToString()) + " client disconnected" + Environment.NewLine);
+                    this.tcpLog.ScrollToEnd();
+                    var ct = Clients.FirstOrDefault((c) => c.Client == client);
+                    if (ct != null)
+                        Clients.Remove(ct);
+                });
             };
             IPOCS.Networker.Instance.OnListening += (isListening) =>
             {
                 try
                 {
                     this.Dispatcher.Invoke(() =>
-              {
-                  if (isListening)
-                      this.tcpLog.AppendText("Listening for connections..." + Environment.NewLine);
-                  else
-                      this.tcpLog.AppendText("No longer listening for connections." + Environment.NewLine);
-                  this.tcpLog.ScrollToEnd();
-              });
+                    {
+                        if (isListening)
+                            this.tcpLog.AppendText("Listening for connections..." + Environment.NewLine);
+                        else
+                            this.tcpLog.AppendText("No longer listening for connections." + Environment.NewLine);
+                        this.tcpLog.ScrollToEnd();
+                    });
                 }
                 catch (System.Threading.Tasks.TaskCanceledException) { }
             };
@@ -234,7 +250,7 @@ namespace IPOCS_Programmer
             };
             bgw.RunWorkerAsync();
         }
-        
+
         private void Editor_SaveSiteData_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(saveFileName))

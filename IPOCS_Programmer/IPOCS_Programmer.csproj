@@ -189,7 +189,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ccit_crc16.cs" />
     <Compile Include="ClientTab.xaml.cs">
       <DependentUpon>ClientTab.xaml</DependentUpon>
     </Compile>
