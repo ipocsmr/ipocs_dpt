@@ -12,7 +12,7 @@ namespace IPOCS_Programmer.ObjectTypes
 {
     public class Concentrator
     {
-        public byte UnitID { get; set; }
+        public ushort UnitID { get; set; }
 
         [Editor(typeof(ConcentratorEditor), typeof(CollectionEditor))]
         public List<BasicObject> Objects { get; set; } = new List<BasicObject>();

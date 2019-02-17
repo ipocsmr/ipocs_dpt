@@ -55,16 +55,26 @@ namespace IPOCS_Programmer
             {
                 var concentrator = Concentrators.FirstOrDefault((c) => c.UnitID == client.UnitID);
                 var vector = concentrator.Serialize();
-                var output = BitConverter.ToString(vector.ToArray()).Replace("-", " ");
 
-                //var crcC = new ccit_crc16(InitialCrcValue.NonZero1);
-                //ushort crc = crcC.ComputeChecksum(vector.ToArray());
-
+                ushort providedChecksum = ushort.Parse(request.RXID_SITE_DATA_VERSION);
+                ushort computedChecksum = IPOCS.CRC16.Calculate(vector.ToArray());
                 this.Dispatcher.Invoke(() =>
                 {
-                    this.tcpLog.AppendText("Recieved CRC: " + request.RXID_SITE_DATA_VERSION + ", Calculated CRC: " + IPOCS.CRC16.Calculate(vector.ToArray()).ToString("X4") + Environment.NewLine);
+                    this.tcpLog.AppendText("Recieved CRC: " + request.RXID_SITE_DATA_VERSION + ", Calculated CRC: " + computedChecksum.ToString() + Environment.NewLine);
                     this.tcpLog.ScrollToEnd();
                 });
+                if (providedChecksum == 0 || computedChecksum != providedChecksum)
+                {
+                    var responseMsg = new IPOCS.Protocol.Message();
+                    responseMsg.RXID_OBJECT = client.UnitID.ToString();
+                    responseMsg.packets.Add(new IPOCS.Protocol.Packets.ApplicationData
+                    {
+                        RNID_XUSER = 0x0001,
+                        PAYLOAD = vector.ToArray()
+                    });
+                    client.Send(responseMsg);
+                    return false;
+                }
                 return true;
             };
             IPOCS.Networker.Instance.OnDisconnect += (client) =>
