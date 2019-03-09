@@ -10,45 +10,6 @@
         Title="IPOCS Data Preperation Tool" Height="500" Width="750" Closing="window_Closing">
     <DockPanel Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <TabControl Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
-            <TabItem Header="Arduino control">
-                <DockPanel>
-                    <ToolBar DockPanel.Dock="Top">
-                        <ToggleButton Click="ArduinoConnect_Click" Margin="0 0 5 0">
-                            <Image Source="icons/lan-connect.png" Width="16" />
-                        </ToggleButton>
-                        <Menu>
-                            <MenuItem x:Name="PortMenu" Margin="0 2 5 0">
-                                <MenuItem.Header>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image Source="icons/serial-port.png" Width="16" />
-                                        <Image Source="icons/menu-down.png" Width="8" />
-                                    </StackPanel>
-                                </MenuItem.Header>
-                                <MenuItem.Resources>
-                                    <Style TargetType="{x:Type MenuItem}">
-                                        <EventSetter Event="Click" Handler="PortItemSelected"/>
-                                    </Style>
-                                </MenuItem.Resources>
-                                <MenuItem.ItemTemplate>
-                                    <DataTemplate>
-                                        <Label Content="{Binding}" />
-                                    </DataTemplate>
-                                </MenuItem.ItemTemplate>
-                            </MenuItem>
-                        </Menu>
-                        <ToggleButton Click="ArduinoConnect_Click" Margin="0 0 5 0">
-                            <Image Source="icons/lan-connect.png" Width="16" />
-                        </ToggleButton>
-                    </ToolBar>
-                    <DockPanel DockPanel.Dock="Bottom">
-                        <Button DockPanel.Dock="Right" HorizontalAlignment="Right" Click="sendIt_Click">
-                            <Image Source="icons/cube-send.png" Width="16" />
-                        </Button>
-                        <TextBox x:Name="toSend" KeyUp="TextBox_KeyUp"></TextBox>
-                    </DockPanel>
-                    <TextBox HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" IsReadOnly="True" x:Name="incoming" />
-                </DockPanel>
-            </TabItem>
             <TabItem Header="Yard configuration" IsSelected="True">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -81,9 +42,12 @@
                             <Button ToolTip="Add new object" Margin="0 0 5 0" Click="AddObjectClick">
                                 <Image Source="icons/plus.png" Width="16" />
                             </Button>
-                            <Button ToolTip="Export to clipboard" Click="SerializeClick">
+                            <Button ToolTip="Export to clipboard" Margin="0 0 5 0" Click="SerializeClick">
                                 <Image Source="icons/export.png" Width="16" />
                             </Button>
+                            <ToggleButton Click="ArduinoConnect_Click">
+                                <Image Source="icons/lan-connect.png" Width="16" />
+                            </ToggleButton>
                         </StackPanel>
                     </Grid>
                     <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />

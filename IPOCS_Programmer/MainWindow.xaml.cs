@@ -34,9 +34,6 @@ namespace IPOCS_Programmer
             string version = fvi.FileVersion;
             this.Title = this.Title + " - " + version;
 
-            var ports = System.IO.Ports.SerialPort.GetPortNames();
-            this.PortMenu.ItemsSource = ports;
-
             IPOCS.Networker.Instance.OnConnect += (client) =>
             {
                 this.Dispatcher.Invoke(() =>
@@ -106,20 +103,7 @@ namespace IPOCS_Programmer
         }
 
         public ObservableCollection<ClientTab> Clients { get; } = new ObservableCollection<ClientTab>();
-
-        private MenuItem selectedMenuItem = null;
-        private void PortItemSelected(object sender, RoutedEventArgs e)
-        {
-            if (this.PortMenu == sender)
-                return;
-            if (this.selectedMenuItem != null && sender != this.selectedMenuItem)
-                this.selectedMenuItem.IsChecked = false;
-
-            var menuItem = (sender as MenuItem);
-            menuItem.IsChecked = !menuItem.IsChecked;
-            this.selectedMenuItem = menuItem;
-        }
-
+        
         private void AddObjectClick(object sender, RoutedEventArgs e)
         {
             var concentrator = new ObjectTypes.Concentrator();
@@ -142,73 +126,11 @@ namespace IPOCS_Programmer
         private void ArduinoConnect_Click(object sender, RoutedEventArgs e)
         {
             var item = sender as System.Windows.Controls.Primitives.ToggleButton;
-            if (this.selectedMenuItem == null)
-            {
-                item.IsChecked = false;
-                return;
-            }
-            if (item.IsChecked.HasValue && item.IsChecked.Value)
-            {
-                this.port = new System.IO.Ports.SerialPort(this.selectedMenuItem.DataContext as String, 9600);
-                new System.Threading.Thread(new System.Threading.ThreadStart(this.threadRunner)).Start();
-            }
-            else
-            {
-                this.port.Close();
-                this.port = null;
-            }
-        }
-
-        System.IO.Ports.SerialPort port;
-        private void threadRunner()
-        {
-            if (this.port != null && !this.port.IsOpen)
-                this.port.Open();
-            try
-            {
-                while (this.port != null && this.port.IsOpen)
-                {
-                    int line = this.port.ReadChar();
-
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        this.incoming.AppendText("" + (char)line);
-                        this.incoming.ScrollToEnd();
-                    });
-                }
-            }
-            catch
-            {
-                this.Dispatcher.Invoke(() =>
-                {
-                    this.incoming.AppendText(Environment.NewLine + "*** Connection closed" + Environment.NewLine);
-                    this.incoming.ScrollToEnd();
-                });
-            }
-        }
-
-        private void TextBox_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Return)
-            {
-                sendIt_Click(sender, null);
-            }
-        }
-
-        private void sendIt_Click(object sender, RoutedEventArgs e)
-        {
-            this.port.WriteLine(this.toSend.Text);
-            this.toSend.Text = string.Empty;
         }
 
         private void window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             IPOCS.Networker.Instance.isListening = false;
-            if (this.port != null && this.port.IsOpen)
-            {
-                this.port.Close();
-                this.port = null;
-            }
         }
 
         public static ObservableCollection<ObjectTypes.Concentrator> Concentrators { get; private set; } = new ObservableCollection<ObjectTypes.Concentrator>();
