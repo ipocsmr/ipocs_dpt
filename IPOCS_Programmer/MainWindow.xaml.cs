@@ -126,6 +126,8 @@ namespace IPOCS_Programmer
         private void ArduinoConnect_Click(object sender, RoutedEventArgs e)
         {
             var item = sender as System.Windows.Controls.Primitives.ToggleButton;
+            IPOCS.Networker.Instance.isListening = !IPOCS.Networker.Instance.isListening;
+            item.IsChecked = IPOCS.Networker.Instance.isListening;
         }
 
         private void window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -161,27 +163,10 @@ namespace IPOCS_Programmer
                         Concentrators.Add(concentrator);
                 }
                 saveFileName = dialog.FileName;
-                restartServer();
             }
         }
 
         string saveFileName { get; set; }
-
-        private void restartServer()
-        {
-            var bgw = new System.ComponentModel.BackgroundWorker();
-            bgw.DoWork += (sender, e) =>
-            {
-                if (IPOCS.Networker.Instance.isListening)
-                    IPOCS.Networker.Instance.isListening = false;
-                while (IPOCS.Networker.Instance.isListening)
-                {
-                    System.Threading.Thread.Sleep(100);
-                }
-                IPOCS.Networker.Instance.isListening = true;
-            };
-            bgw.RunWorkerAsync();
-        }
 
         private void Editor_SaveSiteData_Click(object sender, RoutedEventArgs e)
         {
@@ -194,7 +179,6 @@ namespace IPOCS_Programmer
                 if (saved.HasValue && saved.Value)
                 {
                     this.saveFileName = dialog.FileName;
-                    restartServer();
                 }
             }
 

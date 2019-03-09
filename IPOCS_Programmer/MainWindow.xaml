@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IPOCS_Programmer"
         xmlns:objectTypes="clr-namespace:IPOCS_Programmer.ObjectTypes"
+        xmlns:local2="clr-namespace:IPOCS;assembly=IPOCS"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="IPOCS Data Preperation Tool" Height="500" Width="750" Closing="window_Closing">
@@ -22,16 +23,16 @@
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                            <ListBox Grid.Row="1" ItemsSource="{Binding Concentrators, ElementName=window, Mode=OneWay}" x:Name="objectlist" Margin="0 5 0 0">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="icons/group.png" Margin="0,0,5,0" Width="8" />
-                                            <TextBlock Text="{Binding UnitID}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
+                        <ListBox Grid.Row="1" ItemsSource="{Binding Concentrators, ElementName=window, Mode=OneWay}" x:Name="objectlist" Margin="0 5 0 0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="icons/group.png" Margin="0,0,5,0" Width="8" />
+                                        <TextBlock Text="{Binding UnitID}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                         <StackPanel Grid.Row="0" Margin="0 5 0 0" Orientation="Horizontal">
                             <Button ToolTip="Load" Margin="0 0 5 0" Click="Editor_LoadSiteData_Click">
                                 <Image Source="icons/book-open-page-variant.png" Width="16" />
@@ -45,9 +46,6 @@
                             <Button ToolTip="Export to clipboard" Margin="0 0 5 0" Click="SerializeClick">
                                 <Image Source="icons/export.png" Width="16" />
                             </Button>
-                            <ToggleButton Click="ArduinoConnect_Click">
-                                <Image Source="icons/lan-connect.png" Width="16" />
-                            </ToggleButton>
                         </StackPanel>
                     </Grid>
                     <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
@@ -55,17 +53,35 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Connected clients">
-                <DockPanel>
-                    <ListBox Width="200" DockPanel.Dock="Left" ItemsSource="{Binding Clients, ElementName=window, Mode=OneWay}" x:Name="ClientList">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding Identity}"></Label>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    <TextBox x:Name="tcpLog" DockPanel.Dock="Right" />
-                    <ContentControl Content="{Binding SelectedItem, ElementName=ClientList, Mode=OneWay}" />
-                </DockPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"></ColumnDefinition>
+                        <ColumnDefinition Width="5"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" Margin="5 5 5 5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="150"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 5 0 0" Orientation="Horizontal">
+                            <ToggleButton Click="ArduinoConnect_Click">
+                                <Image Source="icons/lan-connect.png" Width="16" />
+                            </ToggleButton>
+                        </StackPanel>
+                        <ListBox Grid.Row="1" ItemsSource="{Binding Clients, ElementName=window, Mode=OneWay}" x:Name="ClientList" Margin="0,5,0,0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Identity}"></Label>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <TextBox Grid.Row="2" x:Name="tcpLog" Margin="0,5,0,0" />
+                    </Grid>
+                    <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+                    <ContentControl Grid.Column="2" Content="{Binding SelectedItem, ElementName=ClientList, Mode=OneWay}" />
+                </Grid>
             </TabItem>
         </TabControl>
     </DockPanel>

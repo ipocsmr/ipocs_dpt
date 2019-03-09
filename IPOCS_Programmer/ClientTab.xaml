@@ -6,9 +6,10 @@
              xmlns:local="clr-namespace:IPOCS_Programmer"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" x:Name="clientTab"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="500">
     <DockPanel>
-        <DockPanel DockPanel.Dock="Right">
+        <TextBox HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" IsReadOnly="True" x:Name="tcpLog" DockPanel.Dock="Left" Width="350px" />
+        <DockPanel>
             <Button DockPanel.Dock="Bottom" HorizontalAlignment="Right" Click="sendItNet_Click">
                 <Image Source="icons/cube-send.png" Width="16" />
             </Button>
@@ -30,6 +31,5 @@
             </StackPanel>
             <xctk:PropertyGrid x:Name="PacketToSend" />
         </DockPanel>
-        <TextBox HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" IsReadOnly="True" x:Name="tcpLog" />
     </DockPanel>
 </UserControl>
