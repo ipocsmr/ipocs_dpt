@@ -14,10 +14,13 @@ namespace IPOCS_Programmer.ObjectTypes
 
         public byte debounceTime { get; set; }
 
+        public byte releaseHoldTime { get; set; }
+
         protected override void Serialize(List<byte> buffer)
         {
             buffer.Add(this.inputPin);
             buffer.Add(this.debounceTime);
+            buffer.Add(this.releaseHoldTime);
         }
     }
 }
