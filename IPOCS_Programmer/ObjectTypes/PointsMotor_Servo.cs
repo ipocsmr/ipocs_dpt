@@ -11,6 +11,7 @@ namespace IPOCS_Programmer.ObjectTypes
         public override byte motorTypeId { get { return 2; } }
         public byte servoPin { get; set; }
         public byte positionPin { get; set; }
+        public bool reverseStatus { get; set; }
 
         public override List<byte> Serialize()
         {
@@ -18,6 +19,7 @@ namespace IPOCS_Programmer.ObjectTypes
             vector.Add(motorTypeId);
             vector.Add(this.servoPin);
             vector.Add(positionPin);
+            vector.Add((byte)(reverseStatus ? 1 : 0));
             return vector;
         }
 

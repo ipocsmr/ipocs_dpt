@@ -12,6 +12,7 @@ namespace IPOCS_Programmer.ObjectTypes
         public byte ThrowLeftOutput { get; set; }
         public byte ThrowRightOutput { get; set; }
         public byte positionPin { get; set; }
+        public bool reverseStatus { get; set; }
 
         public override List<byte> Serialize()
         {
@@ -20,6 +21,7 @@ namespace IPOCS_Programmer.ObjectTypes
             vector.Add(this.ThrowLeftOutput);
             vector.Add(this.ThrowRightOutput);
             vector.Add(positionPin);
+            vector.Add((byte)(reverseStatus ? 1 : 0));
             return vector;
         }
     }
