@@ -14,6 +14,8 @@ namespace IPOCS_Programmer.ObjectTypes
     {
         public ushort UnitID { get; set; }
 
+        public string Name { get; set; }
+
         [Editor(typeof(ConcentratorEditor), typeof(CollectionEditor))]
         public List<BasicObject> Objects { get; set; } = new List<BasicObject>();
 

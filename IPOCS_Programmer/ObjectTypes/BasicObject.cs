@@ -10,6 +10,8 @@ namespace IPOCS_Programmer.ObjectTypes
     {
         public string Name { get; set; }
 
+        public string SystemName { get; set; }
+
         public abstract byte objectTypeId { get; }
 
         public virtual IList<Type> SupportedOrders
