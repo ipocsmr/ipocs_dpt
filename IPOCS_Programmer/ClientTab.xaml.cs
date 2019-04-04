@@ -39,7 +39,7 @@ namespace IPOCS_Programmer
             BindingOperations.SetBinding(this, IdentityProperty, new Binding
             {
                 FallbackValue = "Unknown Client",
-                Source = this.Client.UnitID
+                Source = this.Client.UnitID.ToString() + " - " + this.Client.Name
             });
             client.OnMessage += (msg) =>
             {

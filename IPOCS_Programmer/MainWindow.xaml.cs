@@ -43,6 +43,7 @@ namespace IPOCS_Programmer
                         client.Disconnect();
                         return;
                     }
+                    client.Name = MainWindow.Concentrators.FirstOrDefault((c) => c.UnitID == client.UnitID).Name;
                     this.tcpLog.AppendText("Client connected" + Environment.NewLine);
                     this.tcpLog.ScrollToEnd();
                     Clients.Add(new ClientTab(client));
