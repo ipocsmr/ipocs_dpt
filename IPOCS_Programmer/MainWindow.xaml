@@ -3,9 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IPOCS_Programmer"
-        xmlns:objectTypes="clr-namespace:IPOCS_Programmer.ObjectTypes"
-        xmlns:local2="clr-namespace:IPOCS;assembly=IPOCS"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="IPOCS Data Preperation Tool" Height="500" Width="750" Closing="window_Closing">
