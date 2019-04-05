@@ -52,7 +52,16 @@ namespace IPOCS_Programmer
             IPOCS.Networker.Instance.OnConnectionRequest += (client, request) =>
             {
                 var concentrator = Concentrators.FirstOrDefault((c) => c.UnitID == client.UnitID);
-                var vector = concentrator.Serialize();
+                if (concentrator == null)
+                {
+                    return false;
+                }
+                List<byte> vector;
+                try {
+                    vector = concentrator.Serialize();
+                } catch (NullReferenceException) {
+                    return false;
+                }
 
                 ushort providedChecksum = ushort.Parse(request.RXID_SITE_DATA_VERSION);
                 ushort computedChecksum = IPOCS.CRC16.Calculate(vector.ToArray());
@@ -136,7 +145,7 @@ namespace IPOCS_Programmer
             IPOCS.Networker.Instance.isListening = false;
         }
 
-        public static ObservableCollection<ObjectTypes.Concentrator> Concentrators { get; private set; } = new ObservableCollection<ObjectTypes.Concentrator>();
+        public static ObservableCollection<ObjectTypes.Concentrator> Concentrators { get; } = new ObservableCollection<ObjectTypes.Concentrator>();
         private void Editor_LoadSiteData_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new Microsoft.Win32.OpenFileDialog();
