@@ -44,7 +44,7 @@ namespace IPOCS_Programmer
                         return;
                     }
                     client.Name = MainWindow.Concentrators.FirstOrDefault((c) => c.UnitID == client.UnitID).Name;
-                    this.tcpLog.AppendText("Client connected" + Environment.NewLine);
+                    this.tcpLog.AppendText("(" + client.UnitID.ToString() + ") connected from " + client.RemoteEndpoint.ToString() + Environment.NewLine);
                     this.tcpLog.ScrollToEnd();
                     Clients.Add(new ClientTab(client));
                 });
@@ -67,7 +67,7 @@ namespace IPOCS_Programmer
                 ushort computedChecksum = IPOCS.CRC16.Calculate(vector.ToArray());
                 this.Dispatcher.Invoke(() =>
                 {
-                    this.tcpLog.AppendText("Recieved CRC: " + request.RXID_SITE_DATA_VERSION + ", Calculated CRC: " + computedChecksum.ToString() + Environment.NewLine);
+                    this.tcpLog.AppendText("(" + client.UnitID.ToString() + ") R.CRC: " + request.RXID_SITE_DATA_VERSION + ", C.CRC: " + computedChecksum.ToString() + Environment.NewLine);
                     this.tcpLog.ScrollToEnd();
                 });
                 if (providedChecksum == 0 || computedChecksum != providedChecksum)
