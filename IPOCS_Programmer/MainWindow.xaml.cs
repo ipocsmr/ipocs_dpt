@@ -38,7 +38,7 @@ namespace IPOCS_Programmer
             {
                 this.Dispatcher.Invoke(() =>
                 {
-                    if (MainWindow.Concentrators.FirstOrDefault((c) => c.UnitID == client.UnitID) == null)
+                    if (MainWindow.Concentrators.ToList().FirstOrDefault((c) => c.UnitID == client.UnitID) == null)
                     {
                         client.Disconnect();
                         return;
