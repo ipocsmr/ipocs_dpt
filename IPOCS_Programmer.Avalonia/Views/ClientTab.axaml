@@ -1,0 +1,53 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:IPOCS_Programmer.Avalonia.ViewModels;assembly=IPOCS_Programmer.Avalonia"
+             xmlns:oe="clr-namespace:Zafiro.Avalonia.ObjectEditor;assembly=Zafiro.Avalonia"
+             xmlns:core="clr-namespace:Zafiro.Core.ObjectEditor;assembly=Zafiro.Core"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Name="clientTab"
+             x:Class="IPOCS_Programmer.Avalonia.Views.ClientTab">
+  <DockPanel>
+    <TextBox HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" IsReadOnly="True" x:Name="tcpLog" DockPanel.Dock="Left" Width="350px" />
+    <DockPanel>
+      <Button DockPanel.Dock="Bottom" HorizontalAlignment="Right" Click="sendItNet_Click">
+        <Image Source="icons/cube-send.png" Width="16" />
+      </Button>
+      <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
+        <ComboBox x:Name="comboBox" ItemsSource="{Binding Objects, ElementName=clientTab, Mode=OneWay}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Name}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+        <ComboBox DataContext="{Binding SelectedItem, ElementName=comboBox, Mode=OneWay}" ItemsSource="{Binding SupportedOrders}" SelectionChanged="comboBox_Selected">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Name}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </StackPanel>
+      <ScrollViewer VerticalScrollBarVisibility="Visible">
+        <oe:ObjectEditor x:Name="PacketToSend">
+          <oe:ObjectEditor.EditorDefinitions>
+            <oe:EditorDefinitionCollection>
+              <oe:EditorDefinition>
+                <oe:EditorDefinition.Template>
+                  <DataTemplate>
+                    <NumericUpDown Value="{Binding Value}" />
+                  </DataTemplate>
+                </oe:EditorDefinition.Template>
+                <oe:EditorDefinition.Key>
+                  <oe:EditorDefinitionKey TargetType="{x:Type system:Double}" Properties="FontSize,MinWidth" />
+                </oe:EditorDefinition.Key>
+              </oe:EditorDefinition>
+            </oe:EditorDefinitionCollection>
+          </oe:ObjectEditor.EditorDefinitions>
+        </oe:ObjectEditor>
+      </ScrollViewer>
+    </DockPanel>
+  </DockPanel>
+</UserControl>

@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.9.11" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.9.11" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.11" />
+    <PackageReference Include="GitVersionTask" Version="5.3.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="IPOCS" Version="1.0.2" />
+    <PackageReference Include="Zafiro.Avalonia" Version="2.2.35" />
+    <PackageReference Include="Zafiro.Avalonia.Design" Version="2.2.35" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\book-open-page-variant.png" />
+    <Resource Include="Assets\content-save.png" />
+    <Resource Include="Assets\cube-send.png" />
+    <Resource Include="Assets\export.png" />
+    <Resource Include="Assets\group.png" />
+    <Resource Include="Assets\lan-connect.png" />
+    <Resource Include="Assets\menu-down.png" />
+    <Resource Include="Assets\plus.png" />
+    <Resource Include="Assets\serial-port.png" />
+  </ItemGroup>
+</Project>

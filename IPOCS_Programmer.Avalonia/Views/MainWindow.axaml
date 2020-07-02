@@ -1,0 +1,116 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:IPOCS_Programmer.Avalonia.ViewModels;assembly=IPOCS_Programmer.Avalonia"
+        xmlns:v="clr-namespace:IPOCS_Programmer.Avalonia.Views;assembly=IPOCS_Programmer.Avalonia"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oe="clr-namespace:Zafiro.Avalonia.ObjectEditor;assembly=Zafiro.Avalonia"
+        xmlns:core="clr-namespace:Zafiro.Core.ObjectEditor;assembly=Zafiro.Core"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="IPOCS_Programmer.Avalonia.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="IPOCS_Programmer.Avalonia">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+  <DockPanel>
+    <TabControl>
+      <TabItem Header="Yard configuration" IsSelected="True">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"></ColumnDefinition>
+            <ColumnDefinition Width="5"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+          </Grid.ColumnDefinitions>
+          <Grid Grid.Column="0" Margin="5 5 5 5">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"></RowDefinition>
+              <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <ListBox Grid.Row="1" Items="{Binding Concentrators, ElementName=window, Mode=OneWay}" x:Name="objectlist" Margin="0 5 0 0">
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <StackPanel Orientation="Horizontal">
+                    <Image Source="icons/group.png" Margin="0,0,5,0" Width="8" />
+                    <TextBlock Text="{Binding UnitID}" />
+                  </StackPanel>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel Grid.Row="0" Margin="0 5 0 0" Orientation="Horizontal">
+              <Button Margin="0 0 5 0">
+                <!--Comm Click="Editor_LoadSiteData_Click"-->
+                <Image Source="/Assets/book-open-page-variant.png" Width="16" />
+              </Button>
+              <Button Margin="0 0 5 0">
+                <Image Source="/Assets/content-save.png" Width="16" />
+              </Button>
+              <Button Margin="0 0 5 0">
+                <Image Source="/Assets/plus.png" Width="16" />
+              </Button>
+              <Button Margin="0 0 5 0">
+                <Image Source="/Assets/export.png" Width="16" />
+              </Button>
+            </StackPanel>
+          </Grid>
+          <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+          <Grid Grid.Column="2" RowDefinitions="Auto *">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
+              <oe:ObjectEditor SelectedItems="{Binding Path=TextBlock}">
+                <oe:ObjectEditor.EditorDefinitions>
+                  <oe:EditorDefinitionCollection>
+                    <oe:EditorDefinition>
+                      <oe:EditorDefinition.Template>
+                        <DataTemplate>
+                          <NumericUpDown Value="{Binding Value}" />
+                        </DataTemplate>
+                      </oe:EditorDefinition.Template>
+                      <oe:EditorDefinition.Key>
+                        <oe:EditorDefinitionKey TargetType="{x:Type system:Double}" Properties="FontSize,MinWidth" />
+                      </oe:EditorDefinition.Key>
+                    </oe:EditorDefinition>
+                  </oe:EditorDefinitionCollection>
+                </oe:ObjectEditor.EditorDefinitions>
+              </oe:ObjectEditor>
+            </ScrollViewer>
+          </Grid>
+        </Grid>
+      </TabItem>
+      <TabItem Header="Connected clients">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"></ColumnDefinition>
+            <ColumnDefinition Width="5"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+          </Grid.ColumnDefinitions>
+          <Grid Grid.Column="0" Margin="5 5 5 5">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"></RowDefinition>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="150"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Margin="0 5 0 0" Orientation="Horizontal">
+              <ToggleButton>
+                <Image Source="/Assets/lan-connect.png" Width="16" />
+              </ToggleButton>
+            </StackPanel>
+            <ListBox Grid.Row="1" Items="{Binding Clients, Mode=OneWay}" x:Name="ClientList" Margin="0,5,0,0">
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <TextBlock Text="{Binding Identity}"/>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBox Grid.Row="2" x:Name="tcpLog" Margin="0,5,0,0" />
+          </Grid>
+          <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+          <v:ClientTab Grid.Column="2" DataContext="{Binding SelectedItem, ElementName=ClientList, Mode=OneWay}" />
+        </Grid>
+      </TabItem>
+    </TabControl>
+  </DockPanel>
+  
+</Window>
