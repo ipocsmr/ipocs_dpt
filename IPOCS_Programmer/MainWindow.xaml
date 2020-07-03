@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:IPOCS_Programmer"
         mc:Ignorable="d"
         Title="IPOCS Data Preperation Tool" Height="500" Width="750" Closing="window_Closing">
     <DockPanel Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
@@ -79,6 +80,9 @@
                     <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
                     <ContentControl Grid.Column="2" Content="{Binding SelectedItem, ElementName=ClientList, Mode=OneWay}" />
                 </Grid>
+            </TabItem>
+            <TabItem Header="Network Discovery">
+                <local:NetworkScanner />
             </TabItem>
         </TabControl>
     </DockPanel>
