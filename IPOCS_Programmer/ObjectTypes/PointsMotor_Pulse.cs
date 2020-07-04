@@ -14,6 +14,7 @@ namespace IPOCS_Programmer.ObjectTypes
         public byte positionPin { get; set; }
         public bool reverseStatus { get; set; }
         public bool lowToThrow { get; set; }
+        public byte timeToPulse { get; set; }
 
         public override List<byte> Serialize()
         {
@@ -24,6 +25,7 @@ namespace IPOCS_Programmer.ObjectTypes
             vector.Add(positionPin);
             vector.Add((byte)(reverseStatus ? 1 : 0));
             vector.Add((byte)(lowToThrow ? 1 : 0));
+            vector.Add(this.timeToPulse);
             return vector;
         }
     }
