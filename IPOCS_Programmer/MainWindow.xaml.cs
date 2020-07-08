@@ -43,6 +43,10 @@ namespace IPOCS_Programmer
                         client.Disconnect();
                         return;
                     }
+                    foreach (var c2 in Clients.Where(c => c.Client.UnitID == client.UnitID))
+                    {
+                        c2.Client.Disconnect();
+                    }
                     client.Name = MainWindow.Concentrators.FirstOrDefault((c) => c.UnitID == client.UnitID).Name;
                     this.tcpLog.AppendText("(" + client.UnitID.ToString() + ") connected from " + client.RemoteEndpoint.ToString() + Environment.NewLine);
                     this.tcpLog.ScrollToEnd();
