@@ -207,7 +207,11 @@ namespace IPOCS_Programmer
             types.AddRange(types2);
             types.Add(typeof(ObjectTypes.BasicObject));
             XmlSerializer xsSubmit = new XmlSerializer(Concentrators.GetType(), types.ToArray());
-            using (XmlWriter writer = XmlWriter.Create(this.saveFileName))
+            using (XmlWriter writer = XmlWriter.Create(this.saveFileName, new XmlWriterSettings
+            {
+              Indent = true,
+              IndentChars = "  "
+            }))
             {
                 xsSubmit.Serialize(writer, Concentrators);
             }
