@@ -83,6 +83,11 @@ namespace IPOCS_Programmer
 
         private void comboBox_Selected(object sender, SelectionChangedEventArgs e)
         {
+            if (e.AddedItems.Count == 0)
+            {
+                PacketToSend.SelectedObject = null;
+                return;
+            }
             var packetType = e.AddedItems[0] as Type;
             PacketToSend.SelectedObject = Activator.CreateInstance(packetType);
         }
