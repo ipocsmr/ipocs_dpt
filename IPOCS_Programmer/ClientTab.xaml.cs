@@ -29,7 +29,7 @@ namespace IPOCS_Programmer
         DependencyProperty.Register("Identity", typeof(string), typeof(ClientTab),
         new PropertyMetadata(string.Empty));
 
-        public List<ObjectTypes.BasicObject> Objects { get { return MainWindow.Concentrators.FirstOrDefault((c) => c.UnitID == this.Client.UnitID).Objects; } }
+        public List<ObjectTypes.BasicObject> Objects { get { return MainWindow.Concentrators.FirstOrDefault((c) => c.Name == this.Client.Name).Objects; } }
 
         public ClientTab(IPOCS.Client client)
         {
@@ -39,7 +39,7 @@ namespace IPOCS_Programmer
             BindingOperations.SetBinding(this, IdentityProperty, new Binding
             {
                 FallbackValue = "Unknown Client",
-                Source = this.Client.UnitID.ToString() + " - " + this.Client.Name
+                Source = this.Client.Name
             });
             client.OnMessage += (msg) =>
             {

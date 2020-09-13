@@ -38,24 +38,24 @@ namespace IPOCS_Programmer
             {
                 this.Dispatcher.Invoke(() =>
                 {
-                    if (MainWindow.Concentrators.ToList().FirstOrDefault((c) => c.UnitID == client.UnitID) == null)
+                    if (MainWindow.Concentrators.ToList().FirstOrDefault((c) => c.Name == client.Name) == null)
                     {
                         client.Disconnect();
                         return;
                     }
-                    foreach (var c2 in Clients.Where(c => c.Client.UnitID == client.UnitID))
+                    foreach (var c2 in Clients.Where(c => c.Client.Name == client.Name))
                     {
                         c2.Client.Disconnect();
                     }
-                    client.Name = MainWindow.Concentrators.FirstOrDefault((c) => c.UnitID == client.UnitID).Name;
-                    this.tcpLog.AppendText("(" + client.UnitID.ToString() + ") connected from " + client.RemoteEndpoint.ToString() + Environment.NewLine);
+                    client.Name = MainWindow.Concentrators.FirstOrDefault((c) => c.Name == client.Name).Name;
+                    this.tcpLog.AppendText("(" + client.Name.ToString() + ") connected from " + client.RemoteEndpoint.ToString() + Environment.NewLine);
                     this.tcpLog.ScrollToEnd();
                     Clients.Add(new ClientTab(client));
                 });
             };
             IPOCS.Networker.Instance.OnConnectionRequest += (client, request) =>
             {
-                var concentrator = Concentrators.FirstOrDefault((c) => c.UnitID == client.UnitID);
+                var concentrator = Concentrators.FirstOrDefault((c) => c.Name == client.Name);
                 if (concentrator == null)
                 {
                     return false;
@@ -71,13 +71,13 @@ namespace IPOCS_Programmer
                 ushort computedChecksum = IPOCS.CRC16.Calculate(vector.ToArray());
                 this.Dispatcher.Invoke(() =>
                 {
-                    this.tcpLog.AppendText("(" + client.UnitID.ToString() + ") R.CRC: " + request.RXID_SITE_DATA_VERSION + ", C.CRC: " + computedChecksum.ToString() + Environment.NewLine);
+                    this.tcpLog.AppendText("(" + client.Name + ") R.CRC: " + request.RXID_SITE_DATA_VERSION + ", C.CRC: " + computedChecksum.ToString() + Environment.NewLine);
                     this.tcpLog.ScrollToEnd();
                 });
                 if (providedChecksum == 0 || computedChecksum != providedChecksum)
                 {
                     var responseMsg = new IPOCS.Protocol.Message();
-                    responseMsg.RXID_OBJECT = client.UnitID.ToString();
+                    responseMsg.RXID_OBJECT = client.Name;
                     responseMsg.packets.Add(new IPOCS.Protocol.Packets.ApplicationData
                     {
                         RNID_XUSER = 0x0001,
@@ -92,7 +92,7 @@ namespace IPOCS_Programmer
             {
                 this.Dispatcher.Invoke(() =>
                 {
-                    this.tcpLog.AppendText(((client.UnitID == 0) ? "Unkown" : client.UnitID.ToString()) + " client disconnected" + Environment.NewLine);
+                    this.tcpLog.AppendText((string.IsNullOrWhiteSpace(client.Name) ? "Unkown" : client.Name) + " client disconnected" + Environment.NewLine);
                     this.tcpLog.ScrollToEnd();
                     var ct = Clients.FirstOrDefault((c) => c.Client == client);
                     if (ct != null)
@@ -121,7 +121,7 @@ namespace IPOCS_Programmer
         private void AddObjectClick(object sender, RoutedEventArgs e)
         {
             var concentrator = new ObjectTypes.Concentrator();
-            concentrator.UnitID = (byte)(Concentrators.Count + 1);
+            concentrator.Name = "Unit " + (Concentrators.Count + 1).ToString();
             Concentrators.Add(concentrator);
         }
 

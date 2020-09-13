@@ -12,8 +12,6 @@ namespace IPOCS_Programmer.ObjectTypes
 {
     public class Concentrator
     {
-        public ushort UnitID { get; set; }
-
         public string Name { get; set; }
 
         [Editor(typeof(ConcentratorEditor), typeof(CollectionEditor))]
